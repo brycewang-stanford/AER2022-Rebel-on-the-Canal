@@ -1,0 +1,5 @@
+spatial_HAC is provided by:
+Hsiang, Solomon M., "Temperatures and Cyclones Strongly Associated with Economic Production in the Caribbean and Central America," Proceedings of the National Academy of Sciences, 2010, 107 (35), 15367–15372.
+
+Available at:
+http://www.fight-entropy.com/2010/06/standard-error-adjustment-ols-for.html
