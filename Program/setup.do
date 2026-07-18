@@ -32,4 +32,4 @@ cap mkdir "$fileplus/o"
 ssc install mvfiles, replace
 mvfiles, infolder("Program/Adofile/spatial_HAC") outfolder("$fileplus/o") 
 
-
+
