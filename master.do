@@ -9,7 +9,12 @@ set emptycells drop
 set matsize 11000
 
 *** Specify custom path etc.
+* !! IMPORTANT: edit the path below to your local project root before running !!
+* The default line is the original author's Windows path.
+* Uncomment and edit one of the alternatives below for macOS/Linux:
 cd "D:/FullReplication"
+* cd "/Users/yourname/AER2022-Rebel-on-the-Canal"
+* cd "/home/yourname/AER2022-Rebel-on-the-Canal"
 
 *** Install packages (comment this out unless running on a new machine for the first time)
 run Program/setup.do
