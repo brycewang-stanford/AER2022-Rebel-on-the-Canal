@@ -2,14 +2,14 @@
 
 > **论文**：Cao, Yiming and Shuo Chen (2022). "Rebel on the Canal: Disrupted Trade Access and Social Conflict in China, 1650–1911." *American Economic Review*, 112(5): 1555–1590. DOI: [10.1257/aer.20201283](https://doi.org/10.1257/aer.20201283)
 > **复现包**：openICPSR 项目 157781-V1（原始代码 Stata，do-file + ado 依赖打包在 `Program/`）
-> **本文目的**：只拆 5 个核心 DID 模型 + 把论文做法和 2024-2026 现代 DID 标准做明确对照。复现细节、GIS 前处理、StatsPAI 能力全景等不在本文范围。
+> **本文目的**：只拆 5 个核心 DID 模型 + 把论文做法和 2022-2026 现代 DID 标准做明确对照。复现细节、GIS 前处理、StatsPAI 能力全景等不在本文范围。
 
 ---
 
 ## 目录
 
 1. [5 个核心 DID 模型](#1-5-个核心-did-模型)
-2. [与 2024-2026 现代 DID 标准的对照](#2-与-2024-2026-现代-did-标准的对照)
+2. [与 2022-2026 现代 DID 标准的对照](#2-与-2022-2026-现代-did-标准的对照)
 3. [StatsPAI 复现骨架](#3-statspai-复现骨架)
 4. [一句话总结](#4-一句话总结)
 
@@ -89,20 +89,23 @@ $$
 
 ---
 
-## 2. 与 2024-2026 现代 DID 标准的对照
+## 2. 与 2022-2026 现代 DID 标准的对照
 
-> **核心结论**：论文是 2×2 DID（一个处理时点，无 staggered），所以 2018-2021 heterogeneity-robust DID 文献（CS、Sun-Abraham、BJS、Wooldridge ETWFE）所针对的"负权重 / forbidden comparisons"问题在论文设定下不出现——**论文方法在 2×2 情形下与 2024 现代最佳实践数学等价**。但 2022 后 AER 出现了两件几乎成为标配的事，**论文未做**。
+> **核心结论**：论文是 2×2 DID（一个处理时点，无 staggered），所以 2018-2021 heterogeneity-robust DID 文献（CS、Sun-Abraham、BJS、Wooldridge ETWFE）所针对的"负权重 / forbidden comparisons"问题在论文设定下不出现——**论文方法在 2×2 情形下与现代最佳实践数学等价**。但 2022 年之后 DID 文献的重心转向了四条新前线——**平行趋势可信度（Roth 2022；Rambachan-Roth 2023）、含零结果的函数形式（Chen-Roth 2024）、连续处理强度（Callaway-Goodman-Bacon-Sant'Anna 2024）、空间溢出（Butts 2023/2024）**——每一条都直接适用于本论文，而论文（成文于 2022）均未覆盖。
 
-| 主题 | 论文做法 | 2024-2026 主流做法 | 评价 |
+| 主题 | 论文做法 | 2022-2026 主流做法 | 评价 |
 |---|---|---|---|
 | **基准估计量** | TWFE (Eq 1) | **CS / Sun-Abraham / BJS / Wooldridge ETWFE** | ✅ **2×2 设定下等价**——CS / Sun-Abraham 在单一处理时点下退化为 TWFE |
-| **事件研究** | decade-by-decade + 50 年前整段参照 | **Sun-Abraham interaction-weighted ES** | ✅ **2×2 设定下等价**；论文的非十年分箱是合理的"波动显示"选择 |
+| **事件研究** | decade-by-decade + 50 年前整段参照 | **Sun-Abraham interaction-weighted ES**；另有 LP-DiD（Dube et al. 2025, *JAE*） | ✅ **2×2 设定下等价**；论文的十年分箱是合理的"波动显示"选择 |
 | **标准误** | 圆括号 cluster + 方括号 **Conley 时空 HAC** | **Wild cluster bootstrap** (Cameron-Gelbach-Miller)、multiplier bootstrap (CS) | ✅ **论文的 Conley 已是 2024 标配** |
-| **平行趋势检验** | Wald test 系数显著为零 | **Roth (2022) power analysis** + **Rambachan-Roth (2023) honest DID sensitivity** | ❌ **论文缺关键一件**——需要补充 |
-| **CIC / SCM** | 双向对比（对 DID 放松反事实同形） | 仍是金标准 | ✅ **已对齐** |
+| **平行趋势检验** | Wald test 系数显著为零 | **Roth (2022) power analysis** + **Rambachan-Roth (2023) honest DID sensitivity** | ❌ **缺，需要补充**（→ §2.1 ①②） |
+| **结果变量** | arcsinh(叛乱/百万人)，解读为 117% | **Chen-Roth (2024, *QJE*)**：log-like ATT 依赖单位，不可作百分比解读；应报 **FE Poisson ATT%** + 扩展/集约边际分解 | ⚠️ **应补**（→ §2.1 ③；论文已有 FE Poisson 稳健性，成本最低） |
+| **连续处理强度 (Table 4)** | 连续剂量 × Post 的 TWFE | **CGS (2024, NBER w32117；R 包 `contdid`)**：剂量比较需 **strong parallel trends**；报 dose-response ATT(d) | ⚠️ **应加声明**（→ §2.1 ④） |
+| **空间溢出 (SUTVA)** | Eq 7 环带估计；SCM donor ≥ 150 km | **Butts (2023/2024)**：基准回归剔除受溢出污染的 0-150 km 环带（donut DID） | ⚠️ 基准 β 偏保守；可补 donut 列 |
+| **CIC / SCM** | 双向对比（对 DID 放松反事实同形） | 仍是金标准；可加 **SDID**（Arkhangelsky et al. 2021, *AER*） | ✅ **已对齐** |
 | **CEM / 工具变量** | 无 | 不是 DID 范畴 | n/a |
 
-### 2.1 论文应补的两件事
+### 2.1 论文应补的四件事
 
 **① 前趋势检验的 power 评估（Roth 2022）**
 
@@ -122,13 +125,25 @@ $$
 - 在 $\bar{M} \in \{0, 0.5, 1, 1.5, 2\} \times \text{样本均值}$ 的网格上重新计算"运河县 vs 非运河县"差异的 95% CI
 - 报告"在 $\bar{M} = 1 \times \text{MSE}$ 的假设下，0.0380 的显著性是否仍维持"
 
-> 这两件是 2022 之后 AER 评审**几乎必问**的。当前论文完全可补，且补的方法已成熟（StatsPAI 中 `sp.pretrends_power` 和 `sp.sensitivity_rr`/`sp.honest_did` 都可直接调用）。
+> ①② 是 2022 之后 AER 评审**几乎必问**的。当前论文完全可补，且补的方法已成熟（StatsPAI 中 `sp.pretrends_power` 和 `sp.sensitivity_rr`/`sp.honest_did` 都可直接调用）。
+
+**③ 结果变量的函数形式（Chen-Roth 2024, *QJE* 139(2): 891-936）**
+
+论文因变量 = arcsinh(叛乱爆发数 / 1600 年人口百万)。约 15 万县-年里只有 1,144 起爆发——零值占绝对多数，效应几乎全在**扩展边际**。Chen-Roth (2024) 证明：含零结果的 log-like 变换（arcsinh、log(1+y)）的 ATT **依赖结果变量的计量单位**（换成"每万人"，系数不成比例地变化），因此不能作百分比解读——"0.0380 ≈ 117%"这一 headline 数字在 2024 标准下需要重述。
+
+**论文应该补做**：把附录里已有的 **FE Poisson 升级为 headline**（$\exp(\hat\beta_{\text{Poisson}})-1$ 是 unit-invariant 的百分比效应）+ 报告扩展边际 LPM（$\mathbf{1}[\text{有叛乱}]$）。代码见 §3.5 (3)。
+
+**④ 连续处理强度需要 strong parallel trends（Callaway-Goodman-Bacon-Sant'Anna 2024, NBER w32117）**
+
+Table 4 的连续剂量 × Post TWFE 要有因果解读，需要 **strong parallel trends**（任意两个剂量水平之间的反事实趋势都平行），且 TWFE 剂量系数是 ACRT 的加权平均、权重可能不直观。论文的二值版本（Table 3）不受影响；式 5 / 式 7 的非参数分组是部分缓解。
+
+**论文应该补做**：正文声明 strong-PT 假设；有条件时用 `contdid` 风格估计量报 dose-response ATT(d)。StatsPAI 目前无对应工具（见《StatsPAI 需要改进的df.md》P2-3）。
 
 ### 2.2 论文**不应**被批评的地方
 
 **"为什么不用 Callaway-Sant'Anna / Sun-Abraham / BJS"？** ——这三者解决的核心问题（staggered adoption 的负权重、forbidden comparisons）**在 2×2 设定下不出现**。当所有处理单位同时接受处理，TWFE = CS = Sun-Abraham = BJS imputation（数学等价）。在论文的 2×2 设定下，强行使用 CS 不会改变系数，只会增加 5× 不必要的计算开销。
 
-> **审稿人视角判断**：论文的方法在 2022 已经是 AER 上线水准；2024-2026 唯一真正的"现代感 gap"是 §2.1 的两件。
+> **审稿人视角判断**：论文的方法在 2022 已经是 AER 上线水准；2022-2026 真正的"现代感 gap"是 §2.1 的四件——①② 关乎识别可信度，③ 关乎 headline 数字的解读，④ 关乎 Table 4 的因果声明。
 
 ---
 
@@ -195,7 +210,7 @@ sp.staggered_synth(df[donor_ok | (df["along_canal"] == 1)],
 
 > **论文第二套 SE 缺失的修复方向**已在旧版 P0-1 详述（按 (unit, time) 分块累加 cKDTree 邻对 + 时间维核函数），不再重复。
 
-### 3.5 把 §2 的两件事跑出来
+### 3.5 把 §2.1 的四件事跑出来
 
 ```python
 # 假设复现包已给出 event study 的 5 个前趋势 + 8 个后处理系数及协方差矩阵
@@ -240,16 +255,16 @@ for M in [0.0, 0.5, 1.0, 1.5, 1.9, 2.0, 2.5]:
     print(f"  {M:>4.1f} |     {worst_case:.3f}              |   {ci_low:>7.4f}     | {sig}")
 ```
 
-**预期输出（用上述 demo 数字）**：
+**预期输出（用上述 demo 数字；注意 power 随真实违反幅度单调上升）**：
 
 ```
 真实违反 (×SE) | 真实违反 (数字) | Pre-trend Wald 检验 power
-   0.5        |   0.010        |   30.8%
-   1.0        |   0.020        |   17.4%
-   1.5        |   0.030        |   8.2%
-   2.0        |   0.040        |   3.6%
-   2.5        |   0.050        |   1.4%
-   3.0        |   0.060        |   0.5%
+   0.5        |   0.010        |    7.2%
+   1.0        |   0.020        |   16.9%
+   1.5        |   0.030        |   32.3%
+   2.0        |   0.040        |   51.6%
+   2.5        |   0.050        |   70.5%
+   3.0        |   0.060        |   85.1%
 
 
 Rambachan-Roth (RM 家族): breakdown M_bar
@@ -290,13 +305,40 @@ sp.honest_did_from_result(
 sp.sensitivity_rr(result=es_result_id)
 ```
 
-这三件一气呵成即可在论文附录新增 "B. Robustness to Parallel Trends Violations" 一节，**将论文从 2022 AER 标配升级到 2026 AER 标配**。
+**③ Chen-Roth (2024)：把 headline 百分比效应换成 unit-invariant 的 Poisson 版本**
+
+```python
+# FE Poisson（论文附录已有此稳健性；现代做法是升级为 headline）
+# 注意因变量用原始计数（不做 arcsinh），暴露 = 1600 年人口
+mp = sp.fepois("rebellions ~ canal_post | county + year",
+               data=df, cluster="county")            # v1.20.0 的 FE Poisson 接口
+att_pct = np.exp(mp.coef["canal_post"]) - 1          # 这才是可作百分比解读的效应
+# delta method SE: att_pct_se ≈ np.exp(b) * se_b
+
+# 扩展边际 LPM：本文效应几乎全在"从无到有"这一边际
+df["any_rebel"] = (df["rebellions"] > 0).astype(int)
+mext = sp.feols("any_rebel ~ canal_post | county + year",
+                data=df, cluster="county")           # 系数 = 叛乱发生概率的变化（百分点）
+```
+
+> 预期：Poisson ATT% 与论文的"117%"同数量级但不相等；扩展边际 LPM 直接给出"运河县每年发生叛乱的概率上升 X 个百分点"——这两个数字都不随"每百万人/每万人"的单位选择变化，是 2024 后的合规表述。
+
+**④ 连续处理（CGS 2024）：StatsPAI 暂无 `contdid` 等价物**
+
+```python
+# 现阶段能做的：非参数分组剂量（论文式 5 已做，用 feols 即可复现）——
+# 把 canal_length 切成组，逐组 × Post，展示单调剂量反应，间接支持 strong-PT；
+# 完整的 ATT(d) dose-response + TWFE 权重诊断需要 contdid 端口，
+# 见《StatsPAI 需要改进的df.md》P2-3。
+```
+
+这些一气呵成即可在论文附录新增 "B. Robustness to Parallel Trends Violations"（①②）与 "C. Functional Form and Dose Response"（③④）两节，**将论文从 2022 AER 标配升级到 2026 AER 标配**。
 
 ---
 
 ## 4. 一句话总结
 
-**5 个核心模型里，前 4 个（基准 TWFE、事件研究、前趋势、处理强度）在 2×2 设定下与 2024-2026 主流做法数学等价；论文唯一可补的方法学增项是 Roth (2022) pre-trend power + Rambachan-Roth (2023) honest DID sensitivity（StatsPAI 已具备工具）。**
+**5 个核心模型在 2×2 设定下与现代 staggered-robust 估计量数学等价，"为什么不用 CS/SA/BJS"不构成批评；真正的现代化增项是四件：① Roth (2022) pre-trend power、② Rambachan-Roth (2023) honest DID（StatsPAI 已具备工具），③ Chen-Roth (2024) 之后应以 FE Poisson ATT% 取代 arcsinh 的"117%"解读（一行代码），④ Table 4 的连续剂量需声明 strong parallel trends（CGS 2024；完整 dose-response 待 StatsPAI 补 contdid 端口）。**
 
 ---
 
