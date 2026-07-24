@@ -1,0 +1,121 @@
+#' Main function of the DIDHAD package
+#' @importFrom haven read_dta
+#' @md
+#' @description Estimates the effect of a treatment on an outcome in a heterogeneous adoption design with no untreated, but some quasi-untreated groups (see de Chaisemartin et. al. (2025)).
+#' @param df (data.frame) A data.frame object
+#' @param outcome (character) Outcome variable
+#' @param group (character) Group Variable
+#' @param time (character) Time variable
+#' @param treatment (character) Treatment variable
+#' @param effects (positive numeric) allows you to specify the number of effects \code{did_had()} tries to estimate. Effect \eqn{\ell} is the treatment's effect at period \eqn{F-1+\ell}, namely \eqn{\ell} periods after adoption. By default, the command estimates only 1 effect and in case you specified more effects than your data allows to estimate the number of effects is automatically adjusted to the maximum. 
+#' @param placebo (nonnegative numeric) allows you to specify the number of placebo estimates \code{did_had()} tries to compute. Those placebos are constructed symmetrically to the estimators of the actual effects, except that the outcome evolution from \eqn{F-1} to \eqn{F-1+\ell} in the actual estimator is replaced by the outcome evolution from \eqn{F-1} to \eqn{F-1-\ell} in the placebo.  
+#' @param level (positive numeric) allows you to specify (1-the level) of the confidence intervals shown by the command. By default this level is set to 0.05, thus yielding 95% level confidence intervals.
+#' @param kernel (character in "tri", "epa", "uni" or "gau") allows you to specify the kernel function used by \code{lprobust()}. Possible choices are triangular, epanechnikov, uniform and gaussian. By default, the program uses a epanechnikov kernel.
+#' @param bw_method (character in "mse-dpi", "mse-rot", "imse-dpi", "imse-rot", "ce-dpi", "ce-rot") allows you to specify the bandwidth selection procedure used by \code{lprobust}. By default, the program uses \code{mse-dpi}. For more details please consult the \code{lprobust} helpfile.
+#' @param dynamic (logical) when this option is specified, effect \eqn{\ell} is scaled by groups' average total treatment dose received from period \eqn{F} to \eqn{F-1+\ell}. Without this option, effect \eqn{\ell} is scaled by groups' average treatment dose at period \eqn{F-1+\ell}. The latter normalization is appropriate if one assumes that groups' outcome at \eqn{F-1+\ell} is only affected by their current treatment (static model). On the other hand, the former normalization is appropriate if one assumes that groups' outcome at \eqn{F-1+\ell} can be affected by their current and past treatments (dynamic model).
+#' @param trends_lin (logical) when this option is specified, the command allows for group-specific linear trends.  This is done by using groups' outcome evolution from period \eqn{F-2} to \eqn{F-1} as an estimator of each group-specific linear trend, and then subtracting this trend from groups' actual outcome evolutions.  Note: due to the fitting of the linear trend in periods \eqn{F-2} to \eqn{F-1}, the number of feasible placebo estimates is reduced by 1 with this option.
+#' @param yatchew (logical) yatchew yields the result from a non-parametric test that the conditional expectation of the \eqn{F-1} to \eqn{F-1+\ell} outcome evolution given the treatment at \eqn{F-1+\ell} is linear (Yatchew, 1997). This test is implemented using the heteroskedasticity-robust test statistic proposed in Appendix E of de Chaisemartin et al. (2025) and it is performed for all the dynamic effects and placebos computed by \code{did_had()}. For placebos, the null being tested is that groups' \eqn{F-1} to \eqn{F-1-\ell} outcome evolution is mean independent of their \eqn{F-1+\ell} treatment, a non-parametric version of a standard pre-trends test where the \eqn{F-1} to \eqn{F-1-\ell} outcome evolution is regressed on groups' \eqn{F-1+\ell} treatment. This option requires the YatchewTest package, which is currently available on CRAN.
+#' @param graph_off (logical) by default, \code{did_had()} outputs an event-study graph with the effect and placebo estimates and their confidence intervals. When specifying \code{graph_off = TRUE}, the graph is suppressed.
+#' @section Overview:
+#' \code{did_had()} estimates the effect of a treatment on an outcome in a heterogeneous adoption design (HAD) with no untreated, but some quasi-untreated groups. HADs are designs where all groups are untreated in the first period, and then some groups receive a strictly positive treatment dose at a period \eqn{F}, which has to be the same for all treated groups (with variation in treatment timing, the \code{did_multiplegt_dyn} package may be used). Therefore, there is variation in treatment intensity, but no variation in treatment timing. 
+#' 
+#' HADs without untreated groups are designs where all groups receive a strictly positive treatment dose at period \eqn{F}. Then, one cannot use untreated units to recover the counterfactual outcome evolution that treated groups would have experienced from before to after \eqn{F}, without treatment. To circumvent this, \code{did_had()} implements the estimator from de Chaisemartin et. al. (2025) which uses so-called "quasi-untreated groups" as the control group. Quasi-untreated groups are groups that receive a "small enough" treatment dose at \eqn{F} to be regarded as "as good as untreated". Therefore, \code{did_had()} can only be used if there are groups with a treatment dose "close to zero". Formally, the command checks the presence of quasi untreated groups via the test proposed in section 3.3 of de Chaisemartin et al. (2025). This test is automatically performed once for each event-study effect and results are reported in the output table. If the results are the same for each event-study effect, this indicates that the treatment changes only once.
+#' 
+#' The command makes use of the \code{lprobust} command by Calonico, Cattaneo and Farrell (2019) to determine an optimal bandwidth, i.e. a treatment dose below which groups can be considered as quasi-untreated. To estimate the treatment's effect, the command starts by computing the difference between the change in outcome of all groups and the intercept in a local linear regression of the outcome change on the treatment dose among quasi-untreated groups. Then, that difference is scaled by groups' average treatment dose at period two. Standard errors and confidence intervals are also computed leveraging \code{lprobust}. We recommend that users of \code{did_had()} cite de Chaisemartin et. al. (2025), Calonico, Cattaneo and Farrell (2019), and Calonico, Cattaneo and Farrell (2018). 
+#' 
+#' @section Interpreting the results from the \code{yatchew} option: 
+#' Following Theorem 5 of de Chaisemartin et. al. (2025), in designs where there are untreated or quasi-untreated groups, under a parallel trends assumption the treatment coefficient from a regression of groups' \eqn{F-1} to \eqn{F-1+\ell} outcome evolution on their the treatment at \eqn{F-1+\ell} is unbiased for the WAS if and only if the conditional expectation of the outcome evolution from \eqn{F-1} to \eqn{F-1+\ell} given the treatment at \eqn{F-1+\ell} is linear. As a result, if the linearity hypothesis cannot be rejected, then one can unbiasedly estimate the WAS at period \eqn{F-1+\ell} using the simple OLS regression described above, rather than resorting to the non-parametric estimator computed by \code{did_had()}.
+#' 
+#' @section Contacts:
+#' 
+#' Github repository: [chaisemartinPackages/did_had](https://github.com/chaisemartinPackages/did_had)
+#' 
+#' Mail: [chaisemartin.packages@gmail.com](mailto:chaisemartin.packages@gmail.com)
+#' 
+#' @section References:
+#' de Chaisemartin, C., Ciccia, D., D'Haultfoeuille, X. and Knau, F. (2025). [Difference-in-Differences Estimators When No Unit Remains Untreated](https://arxiv.org/abs/2405.04465).
+#' 
+#' Calonico, S., M. D. Cattaneo, and M. H. Farrell. (2019). [nprobust: Nonparametric Kernel-Based Estimation and Robust Bias-Corrected Inference](https://nppackages.github.io/references/Calonico-Cattaneo-Farrell_2019_JSS.pdf).
+#' 
+#' Calonico, S., M. D. Cattaneo, and M. H. Farrell. (2018). [On the Effect of Bias Estimation on Coverage Accuracy in Nonparametric Inference](https://nppackages.github.io/references/Calonico-Cattaneo-Farrell_2018_JASA.pdf).
+#' 
+#' Yatchew, A. (1997). An elementary estimator of the partial linear model, \doi{doi:10.1016/S0165-1765(97)00218-8}.
+#' 
+#' @examples
+#' # The sample data for this example can be downloaded by running:
+#' repo <-"https://raw.githubusercontent.com/chaisemartinPackages/did_had/" 
+#' data <- haven::read_dta(paste0(repo,"main/tutorial_data.dta"))
+#' 
+#' # Estimating the effects over five periods and placebos for four pre-treatment periods, 
+#' # suppressing the graph and with a triagular kernel:
+#' 
+#' summary(did_had(df = data, 
+#'                 outcome = "y",
+#'                 group = "g",
+#'                 time = "t",
+#'                 treatment = "d",
+#'                 effects = 5,
+#'                 placebo = 4,
+#'                 kernel = "tri",
+#'                 graph_off = TRUE))
+#' @returns An list object of did_had class. The object contains the estimation results, as well as the selected arguments of the function and a ggplot graph with the event study estimates.
+#' @export
+did_had <- function(
+    df,
+    outcome,
+    group,
+    time,
+    treatment,
+    effects = 1,
+    placebo = 0,
+    level = 0.05,
+    kernel = "epa",
+    bw_method = "mse-dpi",
+    trends_lin = FALSE,
+    dynamic = FALSE,
+    yatchew = FALSE,
+    graph_off = FALSE
+) {
+
+    params <- as.list(match.call())[-1]
+    args <- list()  
+    for (v in names(formals(did_had))) {
+        if (!is.null(get(v))) {
+            if (v == "df") {
+                if (!inherits(get(v), "data.frame")) {
+                    stop("Syntax error in df option. Data.frame required.")
+                }
+            }
+            else if (v %in% c("outcome", "treatment", "group", "time")) {
+                if (!(inherits(get(v), "character") & length(get(v)) == 1)) {
+                    stop(sprintf("Syntax error in %s option. Single string required.", v))
+                }
+            }
+            else if (v %in% c("level")) {
+                if (!(inherits(get(v), "numeric") & get(v)>= 0 & get(v) <= 1)) {
+                    stop(sprintf("Syntax error in %s option. Numeric between 0 and 1 required.", v))
+                }
+            }
+        }
+        if (v != "df") {
+            args[[v]] <- get(v)
+        }
+    }
+    args$df <- params$df
+    params <- NULL
+
+    obj <- list(args)
+    results <- did_het_adoption_main(df = df, outcome = outcome, group = group, time = time, 
+        treatment = treatment, effects = effects, placebo = placebo, level = level, kernel = kernel, bw_method = bw_method,
+        yatchew = yatchew, trends_lin = trends_lin, dynamic = dynamic)
+    obj <- append(obj, list(results))
+    obj <- append(obj, list(did_had_graph(results)))
+    names(obj) <- c("args", "results", "plot")
+
+    if (isFALSE(graph_off)) {
+        print(obj$plot)
+    }
+    
+    class(obj) <- "did_had"
+    return(obj)
+}
