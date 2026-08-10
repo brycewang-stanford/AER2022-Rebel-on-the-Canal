@@ -105,59 +105,31 @@ def station(no, cn, en, bullets, color, pages="", tail=""):
 
 # ═══════════════════════════════════════════ 01 封面
 add("封面", CV(f"""
-  <div style="height:26px"></div>
-  <div style="display:flex;align-items:flex-start;gap:18px">
-    <div style="flex:1">
-      <div class="micro xl" style="color:{PINK}">AMERICAN ECONOMIC REVIEW</div>
-      <div class="micro lg mut" style="margin-top:8px">2022 · 112(5) · 1555–1590</div>
-    </div>
-    <div class="seal ink">AER<br>2022</div>
-  </div>
-  <div style="height:5px;background:{INK};margin:20px 0 26px"></div>
-
-  <div class="hero" style="font-size:112px">运河上的</div>
-  <div class="hero" style="font-size:112px;color:{PINK}">叛乱</div>
-  <div class="hero" style="font-size:34px;margin-top:18px;line-height:1.18">
-    REBEL ON THE CANAL:<br>
-    <span style="color:{BLUE}">DISRUPTED TRADE ACCESS AND</span><br>
-    <span style="color:{BLUE}">SOCIAL CONFLICT IN CHINA, 1650–1911</span></div>
-  <div style="font-size:23px;line-height:1.45;margin-top:18px">
-    Yiming Cao（曹一鸣） · Shuo Chen（陈硕）<br>
-    <span style="color:{MUT}">American Economic Review, 2022, 112(5): 1555–1590<br>
-    doi 10.1257/aer.20201283 · 复现包 openICPSR 157781-V1</span></div>
-
-  <div style="margin-top:22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <span class="stamp">50 张全解</span>
-    <span class="stamp blue flat">原文图表齐上</span>
-    <span class="stamp mint flat">statspai 复现</span>
-  </div>
+  <div style="height:52px"></div>
+  <div class="hero" style="font-size:200px;letter-spacing:-.035em;line-height:1.0">
+    <span style="color:{PINK}">AER</span> <span style="color:{BLUE}">DiD</span></div>
+  <div class="hero" style="font-size:200px;letter-spacing:-.035em;line-height:1.06">
+    论文解释</div>
+  <div style="height:8px;background:{INK};margin:26px 0 24px"></div>
+  <div class="hero" style="font-size:90px;letter-spacing:-.02em;line-height:1.1">
+    京杭大运河<span style="color:{PINK}">上的叛乱</span></div>
 
   <div style="flex:1"></div>
-  <div class="g3" style="margin-bottom:22px">
-    <div class="card flat dk"><div class="strip" style="background:{PINK}"></div>
-      <div class="in" style="padding:12px 16px 14px;gap:4px">
-        <div class="nm" style="font-size:38px">536 × 262</div>
-        <p style="font-size:19px">县 × 年 = 14 万个县-年</p></div></div>
-    <div class="card flat dk"><div class="strip" style="background:{BLUE}"></div>
-      <div class="in" style="padding:12px 16px 14px;gap:4px">
-        <div class="nm" style="font-size:38px">1826</div>
-        <p style="font-size:19px">唯一的处理时点</p></div></div>
-    <div class="card flat dk"><div class="strip" style="background:{MINT}"></div>
-      <div class="in" style="padding:12px 16px 14px;gap:4px">
-        <div class="nm" style="font-size:38px">0.0380</div>
-        <p style="font-size:19px">基准 DID 系数</p></div></div>
+
+  <div class="hero" style="font-size:30px;line-height:1.22;color:{BLUE}">
+    REBEL ON THE CANAL: DISRUPTED TRADE<br>
+    ACCESS AND SOCIAL CONFLICT IN CHINA</div>
+  <div style="font-size:24px;line-height:1.5;margin-top:16px">
+    Yiming Cao（曹一鸣） · Shuo Chen（陈硕）<br>
+    <span style="color:{MUT}">American Economic Review, 2022, 112(5): 1555–1590</span></div>
+  <div class="bar" style="margin-top:26px;margin-bottom:14px;padding:18px 24px;
+       font-size:25px;text-align:center">
+    50 张全解 · <b>原文 4 图 7 表全裁出</b> · <i>statspai 复现</i>
   </div>
-  <div class="bar" style="margin-bottom:14px">
-    <span class="h">大运河废了，叛乱就来了</span>
-    1826 年清政府试行漕粮海运 → 运河县失去贸易生命线 →
-    叛乱爆发率相对上升 <b>约 117%</b>，主因是<i>失业的城市贸易从业者</i>。
-  </div>
-""", deco(dots(748, 806, 6, 3, 17, 32, PINK, .95),
-          zig(70, 812, 82, 116, YELLOW, 1, -10),
-          tri(566, 836, 80, MINT, 22),
-          wave(196, 816, 300, 52, BLUE, 8),
-          checker(770, 214, 9, 2, 17, INK, -4),
-          ring(624, 800, 104, CORAL, 9, .9))))
+""", deco(zig(880, 900, 92, 130, YELLOW, 1, 12),
+          wave(64, 946, 300, 54, BLUE, 9),
+          ring(430, 890, 116, CORAL, 10, .95),
+          tri(676, 924, 84, MINT, 20))))
 
 # ═══════════════════════════════════════════ 02 第一作者
 add("第一作者", PG("第一作者", meta("WHO WROTE IT", "YIMING CAO"), f"""
