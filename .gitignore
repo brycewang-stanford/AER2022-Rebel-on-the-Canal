@@ -12,3 +12,7 @@
 # OS noise
 Thumbs.db
 desktop.ini
+
+# Python
+__pycache__/
+*.pyc
