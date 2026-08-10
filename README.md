@@ -60,13 +60,13 @@ do master.do
 
 | File | Audience | Content |
 |---|---|---|
-| [论文解释.md](论文解释.md) | Anyone curious about the paper | Plain-language walkthrough of identification, findings, and mechanisms. Each claim tagged to a specific table or figure. |
+| [Rebel on the Canal (AER 2022).md](<Rebel on the Canal (AER 2022).md>) | Anyone curious about the paper | The single source of truth on the paper's content: identification, the five core models, findings, mechanisms, and a 2022–2026 modern-DID reassessment. Each claim tagged to a specific table or figure. Written as an Obsidian note (YAML frontmatter, callouts, `attachments/` figures); mirrors the copy in the author's vault. |
 | [论文模型解读与StatsPAI复现分析.md](论文模型解读与StatsPAI复现分析.md) | Researchers considering reproduction | Equation-by-equation dissection of the paper + assessment of whether StatsPAI can reproduce it. |
 | [source.txt](source.txt) | Anyone running `master.do` | Citation for the `spatial_HAC` user-written package (Hsiang 2010). |
 
 ## Internal working notes
 
-`docs/superpowers/specs/` contains design specs from collaborative editing sessions (e.g. the spec used to draft [论文解释.md](论文解释.md)). These are working notes, not part of the paper or replication package — keep them under version control, but don't treat them as deliverable artefacts.
+`docs/superpowers/specs/` contains design specs from collaborative editing sessions (e.g. the spec used to draft the now-merged `论文解释.md`, whose content lives in [Rebel on the Canal (AER 2022).md](<Rebel on the Canal (AER 2022).md>) as of 2026-08-10). These are working notes, not part of the paper or replication package — keep them under version control, but don't treat them as deliverable artefacts.
 
 ## License
 

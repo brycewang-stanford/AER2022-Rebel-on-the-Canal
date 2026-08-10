@@ -1,8 +1,8 @@
 # StatsPAI 改进清单：基于《Rebel on the Canal》复现的发现
 
-> **来源**：撰写《[论文解释.md](论文解释.md)》与《[论文模型解读与StatsPAI复现分析.md](论文模型解读与StatsPAI复现分析.md)》时反复触到的 StatsPAI v1.20.0 缺口。  
+> **来源**：撰写《[Rebel on the Canal (AER 2022).md](<Rebel on the Canal (AER 2022).md>)》与《[论文模型解读与StatsPAI复现分析.md](论文模型解读与StatsPAI复现分析.md)》时反复触到的 StatsPAI v1.20.0 缺口。  
 > **目标**：列出在"复现一篇标准 AER 应用计量论文 + 配套 agent-native 工作流"这个具体场景下，StatsPAI 接下来最值得改进的 5–7 件事。  
-> **不重复**：本文不复述论文内容（见《论文解释.md》），也不复述 StatsPAI 能力全景（见旧版《论文模型解读与StatsPAI复现分析.md》删去的"StatsPAI 19 项能力对照表"）。
+> **不重复**：本文不复述论文内容（见《Rebel on the Canal (AER 2022).md》），也不复述 StatsPAI 能力全景（见旧版《论文模型解读与StatsPAI复现分析.md》删去的"StatsPAI 19 项能力对照表"）。
 
 ---
 
@@ -76,7 +76,7 @@
 
 ### 2.3 价值
 
-- 这是 fixest/reghdfe 用户迁移到 StatsPAI 的**第一痛点**——写完《论文解释.md》后我深有体会
+- 这是 fixest/reghdfe 用户迁移到 StatsPAI 的**第一痛点**——写完那篇论文笔记后我深有体会
 - 论文式 1（列 2-4）共需手工造 262 + 6 + 90 = 约 360 列；接受 `pre_reb#c.year + province^year + i.pref#c.year` 后**只剩 3 行**
 
 ### 2.4 验收
@@ -162,7 +162,7 @@ sp.event_study(
 - Roth (2022) pre-trend test power
 - Rambachan-Roth (2023) honest DID
 
-《论文解释.md》§6.4 已用论文数字（baseline 0.0380、SE 0.0166、pre-trend max ≈ 0.02）跑出**breakdown $\bar M^* \approx 1.9$**——这是论文应补但**未补**的关键增项。
+《Rebel on the Canal (AER 2022).md》§7 ①② 已用论文数字（baseline 0.0380、SE 0.0166、pre-trend max ≈ 0.02）跑出**breakdown $\bar M^* \approx 1.9$**——这是论文应补但**未补**的关键增项。
 
 StatsPAI 工具已经齐了（`sp.pretrends_power`、`sp.sensitivity_rr`、`sp.honest_did_from_result`），但**没有现成 pipeline**，需要用户知道：
 1. fit event study 拿到 result_id
@@ -267,7 +267,7 @@ StatsPAI 已有 `validation_status` / `sp.cross_validate` 机制，但**没有�
 
 ### 9.1 问题
 
-2022-2026 DID 文献的三条新前线目前 StatsPAI 全无对应（详见《论文解释.md》§6.1 文献地图）：
+2022-2026 DID 文献的三条新前线目前 StatsPAI 全无对应（详见《Rebel on the Canal (AER 2022).md》§7.0 文献地图）：
 
 1. **连续剂量 DID**（Callaway-Goodman-Bacon-Sant'Anna 2024, NBER w32117；R 包 `contdid`）：dose-response ATT(d)、ACRT(d)、TWFE 权重诊断、strong parallel trends 检验——本文 Table 4 的剂量强度回归正是适用场景；
 2. **Synthetic DID**（Arkhangelsky et al. 2021, *AER*；R/Stata `synthdid`/`sdid`）：单位权重 + 时间权重下的加权平行趋势，适合"处理组少（73 县）、控制组多、pre 期长（176 年）"的面板；
