@@ -16,3 +16,10 @@ desktop.ini
 # Python
 __pycache__/
 *.pyc
+
+# Replication data (openICPSR license + size) and generated output
+Data/**
+!Data/README.md
+!Data/*/
+!Data/*/.gitkeep
+Results/

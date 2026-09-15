@@ -1,7 +1,0 @@
-00-联系表-contact-sheet.png
-00-全部预览.pdf
-_源码/html/
-_源码/repro/panel.parquet
-_源码/fonts/*.ttf
-!_源码/fonts/build_fonts.py
-_源码/__pycache__/

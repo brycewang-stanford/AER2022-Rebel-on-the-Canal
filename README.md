@@ -3,73 +3,64 @@
 > Cao & Chen (2022), *American Economic Review* 112(5): 1555–1590.
 > **"Rebel on the Canal: Disrupted Trade Access and Social Conflict in China"**
 
-A reading-and-replication workspace for the above paper. This repository contains:
+A reading-and-replication workspace for the above paper.
 
-1. **The paper PDF** — `AER2022-Rebel on the Canal- Disrupted Trade Access and Social Conflict in China.pdf` (4.6 MB).
-2. **Author-supplied replication scripts** — `master.do` (entry point) and `Program/setup.do` (package installer).
-3. **Chinese-language reading notes** — three companion documents at the repo root (see "Reading Notes" below).
-4. **Citation metadata** — `source.txt` (credit for the `spatial_HAC` user-written package).
+## Layout
 
-## What is NOT in this repository
+```text
+.
+├── Data/                  原始数据 — openICPSR 157781-V1 (not tracked by git)
+│   ├── Raw/               shape files, GIS layers
+│   └── Final/             rebellion.dta (analysis panel)
+├── Program/               原始代码 — author's Stata replication code
+│   ├── master.do          entry point            <- in repo
+│   ├── setup.do           package installer      <- in repo
+│   ├── Adofile/           source.txt (in repo) + spatial_HAC/ (from openICPSR)
+│   ├── Clean/clean.do     <- from openICPSR
+│   └── Analysis/*.do      <- from openICPSR (~30 figures and tables)
+├── Materials/             其它材料 — paper, reading notes, DID references
+│   ├── AER2022-Rebel on the Canal- ….pdf
+│   ├── Rebel on the Canal (AER 2022).md
+│   ├── 论文模型解读与StatsPAI复现分析.md
+│   ├── attachments/       figures embedded in the Obsidian note
+│   └── docs/              staggered-DID command references, StatsPAI notes, working specs
+└── Results/               created by master.do (not tracked by git)
+```
 
-`master.do` orchestrates a full empirical reproduction, but the data and auxiliary scripts are **not shipped here**. Researchers who want to actually run the paper's analysis must obtain the official replication package from the AEA **openICPSR** portal (link in the published AER article) and place its contents alongside `master.do`.
+`Program/` and `Data/` keep the author's folder names on purpose: `master.do` calls `run Program/...` and reads `Data/...` relative to the project root.
 
-Specifically absent:
+## What is NOT in this repository yet
 
 | Path master.do expects | In this repo? |
 |---|---|
 | `Program/Clean/clean.do` | No |
 | `Program/Analysis/*.do` (~30 figures and tables) | No |
-| `Program/Adofile/spatial_HAC/` (Hsiang 2010 ado) | No (cited in `source.txt`) |
+| `Program/Adofile/spatial_HAC/` (Hsiang 2010 ado) | No (cited in `Program/Adofile/source.txt`) |
 | `Data/Raw/` (shape files, GIS layers) | No |
 | `Data/Final/rebellion.dta` (analysis panel) | No |
-| `Results/` (output figures and tables) | No |
 
-> `master.do` will still **parse and execute** the lines it can reach — `clear`, `set`, `cd`, `run Program/setup.do` — but it will stop at the first missing `Program/Clean/clean.do` once the openICPSR files are dropped in place.
+Obtain them from the official replication package on AEA **openICPSR** (project 157781) and drop them into the matching folders above. `Data/` and `Results/` contents are git-ignored (openICPSR license + file size).
 
-## How to use `master.do`
+## How to run
 
-```bash
-# 1. Download the official replication package from AEA openICPSR.
-#    (URL is in the published article.)
-
-# 2. Drop its contents so the directory tree matches what master.do expects:
-#
-#    .
-#    ├── master.do                 <- this repo
-#    ├── Program/
-#    │   ├── setup.do              <- this repo (package installer)
-#    │   ├── Adofile/spatial_HAC/  <- from openICPSR
-#    │   ├── Clean/clean.do        <- from openICPSR
-#    │   └── Analysis/*.do         <- from openICPSR
-#    ├── Data/
-#    │   ├── Raw/                  <- from openICPSR
-#    │   └── Final/                <- from openICPSR
-#    └── Results/                  <- created by master.do
-#
-
-# 3. Edit master.do line 9 — replace `D:/FullReplication` with your local
-#    project root. macOS/Linux users: uncomment one of the example lines
-#    just below it.
-
-# 4. From Stata:
-do master.do
-```
+1. Download the openICPSR package and place files as in **Layout**.
+2. Edit the `cd` line in `Program/master.do` — replace `D:/FullReplication` with your local project root (the folder containing `Program/` and `Data/`).
+3. From Stata: `do Program/master.do`
 
 ## Reading Notes
 
 | File | Audience | Content |
 |---|---|---|
-| [Rebel on the Canal (AER 2022).md](<Rebel on the Canal (AER 2022).md>) | Anyone curious about the paper | The single source of truth on the paper's content: identification, the five core models, findings, mechanisms, and a 2022–2026 modern-DID reassessment. Each claim tagged to a specific table or figure. Written as an Obsidian note (YAML frontmatter, callouts, `attachments/` figures); mirrors the copy in the author's vault. |
-| [论文模型解读与StatsPAI复现分析.md](论文模型解读与StatsPAI复现分析.md) | Researchers considering reproduction | Equation-by-equation dissection of the paper + assessment of whether StatsPAI can reproduce it. |
-| [source.txt](source.txt) | Anyone running `master.do` | Citation for the `spatial_HAC` user-written package (Hsiang 2010). |
+| [Rebel on the Canal (AER 2022).md](<Materials/Rebel on the Canal (AER 2022).md>) | Anyone curious about the paper | The single source of truth on the paper's content: identification, the five core models, findings, mechanisms, and a 2022–2026 modern-DID reassessment. Each claim tagged to a specific table or figure. Written as an Obsidian note (YAML frontmatter, callouts, `attachments/` figures); mirrors the copy in the author's vault. |
+| [论文模型解读与StatsPAI复现分析.md](Materials/论文模型解读与StatsPAI复现分析.md) | Researchers considering reproduction | Equation-by-equation dissection of the paper + assessment of whether StatsPAI can reproduce it. |
+| [source.txt](Program/Adofile/source.txt) | Anyone running `master.do` | Citation for the `spatial_HAC` user-written package (Hsiang 2010). |
 
 ## Internal working notes
 
-`docs/superpowers/specs/` contains design specs from collaborative editing sessions (e.g. the spec used to draft the now-merged `论文解释.md`, whose content lives in [Rebel on the Canal (AER 2022).md](<Rebel on the Canal (AER 2022).md>) as of 2026-08-10). These are working notes, not part of the paper or replication package — keep them under version control, but don't treat them as deliverable artefacts.
+`Materials/docs/superpowers/specs/` contains design specs from collaborative editing sessions. These are working notes, not part of the paper or replication package.
 
 ## License
 
 - **Replication scripts and reading notes in this repository** are released under the [MIT License](LICENSE).
-- **The paper PDF** (`AER2022-Rebel on the Canal- …pdf`) is the property of the American Economic Association; see AER's copyright terms before redistribution.
+- **The paper PDF** is the property of the American Economic Association; see AER's copyright terms before redistribution.
 - **The replication package** (data + auxiliary scripts + spatial_HAC ado) is governed by the AEA openICPSR license; obtain it from the official portal.
