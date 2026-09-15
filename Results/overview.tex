@@ -1,0 +1,233 @@
+\documentclass[12pt]{article}%
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[nohead]{geometry}
+\usepackage[singlespacing]{setspace}
+\usepackage[bottom]{footmisc}
+\usepackage{indentfirst}
+\usepackage{tikz}     %enable tikz pictures
+\usepackage{endnotes} %enable to use endnotes to generate references
+\usepackage{color}                                        % Enables colored text
+\definecolor{darkblue}{rgb}{0.0,0.0,0.66}                 % Custom color: dark blue
+\usepackage[hyperfootnotes=false,bookmarksopen]{hyperref} % Enable hyperlinks, expand menu subtree
+\hypersetup{                                              % Custom hyperlink settings
+    pdffitwindow=false,                                   % true: window fit to page when opened
+    pdfstartview={XYZ null null 1.00},                    % Fits the default zoom of the page to 100%
+    pdfnewwindow=true,                                    % Links in new window
+    colorlinks=true,                                      % false: boxed links; true: colored links
+    linkcolor=darkblue,                                   % Color of internal links
+    citecolor=darkblue,                                   % Color of links to bibliography
+    urlcolor=darkblue  }
+\usepackage{graphicx}%
+\usepackage{adjustbox}
+\usepackage{rotating}
+\usepackage{caption} %allow using subfigures
+\usepackage{subfig} %allow using subfigures
+%\usepackage{subcaption}
+\usepackage{standalone}%ignore the preambles in the inputed files
+\usepackage{pdflscape} %Enable landscape of the pdf file (required when reporting wide tables)
+\usepackage[authoryear,round]{natbib} %enable citation format (Author,year)
+\usepackage{threeparttable} %enable using tablenotes
+\usepackage{titling} %used to define subtitle command below
+\usepackage{comment} %comment large body in an environment
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+\setcounter{MaxMatrixCols}{30}
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem{prediction}[theorem]{Prediction}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\newcommand{\pd}[2]{\frac{\partial#1}{\partial#2}}
+\makeatletter
+\def\@biblabel#1{\hspace*{-\labelsep}}
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\makeatother
+\geometry{left=1in,right=1in,top=1.00in,bottom=1.0in}
+
+\begin{document}
+
+\begin{center}
+    \Large{\textbf{Replication Results}} \\
+\end{center} 
+
+\section*{Figures and Tables}
+
+\begin{figure}[htbp!]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+    \begin{center}
+    \caption{Canal usage measured by tribute rice transportation}
+    \textbf{View \path{Program/Maps/figure1.mpk} in ArcMap} \\ 
+    \end{center}
+\end{figure}
+
+\input{Figures/figure2} \clearpage
+
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+    \begin{center}
+    \caption{The spatial distribution of rebellions before and after the abandonment}
+    \textbf{View \path{Program/Maps/figure3.mpk} in ArcMap} \\ 
+    \end{center}
+\end{figure}
+\input{Figures/figure4} \clearpage
+\input{Tables/table1} \clearpage
+\input{Tables/table2} \clearpage
+\input{Tables/table3} \clearpage
+\input{Tables/table4} \clearpage
+\input{Tables/table5} \clearpage
+\input{Tables/table6} \clearpage
+\input{Tables/table7} \clearpage
+
+\appendix 
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\thesection \arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{\thesection \arabic{table}}
+
+\section{Supplementary Figures and Tables}
+\input{Figures/figureA1} \clearpage
+\input{Figures/figureA2} \clearpage
+\input{Figures/figureA3} \clearpage
+\input{Figures/figureA4} \clearpage
+\input{Figures/figureA5} \clearpage
+\input{Figures/figureA6} \clearpage
+\input{Figures/figureA7} \clearpage
+\input{Tables/tableA1} \clearpage
+\input{Tables/tableA2} \clearpage
+\input{Tables/tableA3} \clearpage
+\input{Tables/tableA4} \clearpage
+\input{Tables/tableA5} \clearpage
+\input{Tables/tableA6} \clearpage
+\input{Tables/tableA7} \clearpage
+
+\section{Background Appendix}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\thesection \arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{\thesection \arabic{table}}
+\newpage
+\subsection*{Figures and Tables for Appendix \thesection}
+\begin{figure}[!htbp]
+   \begin{center}
+     \caption{Suitability index for wetland rice (irrigation, medium input)}   
+     \textbf{View \path{Program/Maps/figureB1.mpk} in ArcMap} \\
+   \end{center}
+\end{figure}
+\clearpage
+
+\newpage
+\begin{figure}[!htbp]
+   \begin{center}
+      \caption{Sources and shipping routes of tribute rice in the Qing Dynasty} 
+      \textbf{View \path{Program/Maps/figureB2.mpk} in ArcMap} \\
+    \end{center}
+\end{figure}
+\clearpage
+
+\newpage
+\begin{figure}[!htbp]
+   \begin{center}
+   \caption{The sea route for grain transportation} 
+   \textbf{View \path{Program/Maps/figureB3.mpk} in ArcMap} \\
+   \end{center}
+\end{figure}
+\clearpage
+
+
+\begin{table}[htb] \centering
+   \caption{The leading officials for and against sea transportation}
+   \textbf{No replication needed for this table.}
+\end{table}
+
+
+\section{Data Appendix}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\thesection \arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{\thesection \arabic{table}}
+\newpage
+\subsection*{Figures and Tables for Appendix \thesection}
+
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial distribution of land size}
+  \textbf{View \path{Program/Maps/figureC1.mpk} in ArcMap} \\
+  \end{center}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial distribution of terrain ruggedness}
+  \textbf{View \path{Program/Maps/figureC2.mpk} in ArcMap} \\
+  \end{center}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial distribution of initial population density}
+  \textbf{View \path{Program/Maps/figureC3.mpk} in ArcMap} \\
+  \end{center}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial and chronological distribution of droughts and floodings}
+  \subfloat[Spatial distribution]{\textbf{View \path{Program/Maps/figureC4a.mpk} in ArcMap}} \\
+  \subfloat[Chronological distribution]{
+      \includegraphics[width=.7\textwidth]{Figures/figureC4b.pdf}}\\
+  \end{center}
+\end{figure}
+\clearpage
+
+% Agriculture: suitability
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial distribution of crop suitability for wheat and wetland rice}
+  \textbf{View \path{Program/Maps/figureC5.mpk} in ArcMap} \\
+  \end{center}
+\end{figure}
+\clearpage
+
+% Agriculture: New world crops
+\begin{figure}[p]\captionsetup{justification=centering,singlelinecheck=false,width=0.8\textwidth}
+  \begin{center}
+  \caption{Spatial and chronological distribution of new world crop adoption}
+  \subfloat[Spatial distribution]{\textbf{View \path{Program/Maps/figureC6a.mpk} in ArcMap}} \\
+  \subfloat[Chronological distribution]{
+      \includegraphics[width=.7\textwidth]{Figures/figureC6b.pdf}}\\
+  \end{center}
+\end{figure}
+\clearpage
+
+\end{document}
+
+
+
+

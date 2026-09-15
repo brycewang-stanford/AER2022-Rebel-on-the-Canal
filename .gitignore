@@ -22,4 +22,7 @@ Data/**
 !Data/README.md
 !Data/*/
 !Data/*/.gitkeep
-Results/
+Results/**
+!Results/overview.tex
+!Results/*/
+!Results/*/.gitkeep
